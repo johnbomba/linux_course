@@ -1,0 +1,118 @@
+##################################### tct/ip #########################################
+every device needs the following:
+IP address
+subnet mask 
+broadcast address
+
+# network classes         - look at the first octet
+
+class                   network                     hosts allowed
+
+A                       1.0 -> 127.0                16,777,216
+                        ex: 17.24.88.9
+
+B                       128.0 -> 191.255                65,536
+                        ex: 183.194.46.31
+
+C                       192.0.0 -> 233.255.255             255
+                        ex: 199.83.131.186
+
+    
+# subnet masks
+class                   subnet mask 
+A                       255.0.0.0
+                        last 3 octets are for hosts
+
+B                       255.255.0.0
+                        last 2 octets are for hosts
+
+C                       255.255.225.0
+                        last octet is for hosts
+
+# broadcast addresses
+Class       Network         subnet          broadcast
+A           17.0.0.0        255.0.0.0       17.255.225.255
+
+B           183.194.0.0     255.255.0.0     192.194.255.255
+
+C           199.83.131.0    255.255.255.0   199.83.131.255
+
+# CIDER
+classless inter-domain routing 
+ex 
+IP 121.67.198.94
+    class A network 121.0.0.0
+    class A subnet  255.0.0.0
+    class A broadcast 121.255.255.255
+IP 121.67.198.94
+    CIDR network    121.67.198.0
+    CIDR subnet     255.255.255.0
+    CIDR broadcast  121.67.198.255
+
+# Reserved Private Address Spaces 
+not routed through the public internet
+you can subnet them however you like 
+
+Class               Range                   private address space
+A           1.0.0.0 - 127.255.255.255       10.0.0.0 - 10.255.255.255
+
+B           128.0.0.0 - 191.255.255.255     12.16.0.0 - 172.31.255.255
+
+C           192.0.0.0 - 233.255.255.255     192.168.0.0 - 192.168.255.255
+
+
+####################################### DNS ###########################################
+ip address              - shows ip address info
+ip addr
+ip a
+ip address show 
+
+# the lo device is the loopback device virtual device used to comminicate to itself (localhost)
+
+ifconfig  
+
+# hostname              - human readable name for an IP address 
+
+DNS translates hostnames/domain names to ip and vice versa
+FQDN                    - fully qualified domain name 
+TLD                     - top level domain (.com .net .org etc)
+Domain                  - just to the left of the domain
+subdomain               - left of the domain 
+
+hostname                - command displays the currnet hostname
+uname - n               - same
+
+hostname -f             - fully qualified host name 
+
+hostname <name>         - temp change hostname til next reboot
+
+# to permanently change the hostname edit the /etc/hostname file 
+
+# to lookup DNS 
+host                                - look up a 
+host <dns name or IP address> 
+
+dig 
+
+# etc/hosts
+is local to your linux system it doesnt propagate to the rest of the network 
+
+sample hosts file 
+
+127.0.0.1   localhost
+1.2.1.6     webprod01.mycompany.com
+10.11.12.14 webprod02.mycompany.com
+
+etc/hosts is checked before DNS servers
+
+
+# etc/nsswitch.conf
+NSS                                 - name service switch 
+NSS file controls the order that ips and hostnames are searched 
+
+ex. 
+hosts: files dns
+hostsL files nis dns
+
+once something is found hte search stops
+

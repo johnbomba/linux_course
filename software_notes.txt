@@ -1,0 +1,55 @@
+################################### package ###################################
+a collection of files 
+data / metadata
+    - package description 
+    - version 
+    - dependencies 
+
+################################### package manager ###################################
+installs upgrades and removes packages
+manage demendencies 
+keeps track of installs
+
+################################### RPM distros ###################################
+
+RedHat package manager 
+RedHat 
+CentOS 
+Fedora
+Oracle Linux
+Scientific Linux
+
+#package manager is yum :
+
+yum search string           - search for a string
+yum info [package]          - display info 
+yum install [-y] package    - install package
+    -y                      - auto yes to do you really want to install this 
+yum remove [-y] package     - remove package
+
+# rpm interacts with the package manager: 
+# for programs like dropbox that are not in yum download the *.rpm file adn use rmp
+
+rpm -qa                     - list all installed packages
+rpm -qf <file path>         - list the files packages
+rpm -ql package             - list packages files 
+rpm -ivh package.rpm        - install a package
+rpm -e package              - erase (uninstall) a package
+
+
+
+################################### debian distros ###################################
+apt - advanced packaging tool 
+
+apt-cache search <string>           - search for string 
+apt-cashe show package              - show package info 
+apt-get install [-y] package        - install 
+apt install [-y] package
+
+apt-get remove package              - uninstall and leave configuration
+apt-get purge package               - uninstall and delete configs
+
+dpkg -l                             - list installed packages
+dpkg -S <file path>                 - list files packages
+dpkg -L package                     - list all files in package
+dpkg -i package.deg                 - install a package

@@ -1,0 +1,63 @@
+############################ ping #############################
+ping <host>
+ping -c <count> <host>
+
+# ex:
+ping -c 3 google.com
+ping -c 1 192.168.1.1
+
+# results
+hostname will translate to an ip in the results
+if the host cant resolve you will get unknown host will 
+if you can ping by ip and not hostname there is a DNS issue
+
+rtt             -           stands for round trip time
+
+############################ traceroute #############################
+traceroute
+requires root priv
+
+uses dns by default 
+-n              - no dns
+
+prints one line per hop
+shows all hops to an ip/host
+
+*               - if the system is otherwise working and you get a * a router is blocking tracert data 
+
+# ex:
+traceroute -n google.com
+
+
+tracepath       - doesnt require root 
+-n              - no dns
+prints one line for each reply it recieves (can show an ip more than once unline traceroute)
+ 
+
+############################ netstat #############################
+netstat
+-n              - displays numerical addresses and ports
+-i              - displays a list of network interfaces
+-r              - displays the route table (netstat -rn)
+-p              - displays the PID and program used - requires root
+-l              - displays listening sockets (netstat -nlp)
+-t              - limit the output to TCP (netstat -ntlp)
+-u              - limit the output to UDP (netstat -nulp)
+
+############################ tcpdump #############################
+tcpdump         - check traffic to sniff what packets are being delivered - needs root
+                - prints contents of packets recieved/timestamp/port/destiantion and port 
+-n              - no dns 
+-A              - ASCII human readable text
+-v              - verbose
+-vvv            - very verbose 
+
+############################ telnet #############################
+almost completely used for troubleshooting 
+replaced by ssh
+
+telnet <host or ip> <port>
+
+# ex.
+telnet google.com 80
+

@@ -1,0 +1,252 @@
+############################# permissions ################################
+
+ls -l 
+-rw-rw-r-- 1 bob users 10400 sep 27 8:52 sales.data
+-    rwx   rwx   rwx 
+type/user/group/other 
+
+# first char is
+ - is a reg file
+ d is a dir
+ l is a symbolic link 
+
+
+# for a file the next shows:
+ r read  
+ w write 
+ x execute
+
+# for a dir 
+ r = allows file names in teh dir to be read
+ w - allows entries in the dir to be modified 
+ x - allows access to contents and matadata for entries for example modification dates 
+# permissions on a dir can effect the files in the dir 
+# if a file permission looks correct check the dir permissions 
+# work your way up to the root 
+
+############################# groups ################################
+
+
+# catagories 
+ u - user that owns the file 
+ g - group users
+ o - other users
+ a - all 
+
+every user is part of at least one group 
+users can belong to many groups 
+groups are used to organize users 
+the groups command displays a users groups 
+or you can use id - Gn 
+
+############################# chmod ################################
+
+chmod               - change mode
+u g o a             - user category 
+                    user, group, other, all 
++-=                 - add subtract or set permissions
+rwx                 - read, write, execute
+#ex:
+chmod g+w sales.data            - add w to group
+chmod g+wx sales.data           - add w and x to group 
+chmod u+rwx,g-x sales.data      - add rwx to user and remove x from group
+chmod a=r sales.data            - set all to read 
+chmod u=rwx,g=rx,o= sales.data  - sets user rwx group rx and other to none
+
+# numeric based permissions
+
+r       w       x
+0       0       0       - value for off    
+1       1       1       - value for on 
+4       2       1       - base 10 value for on 
+
+ocatal  binary  string  description
+0       0       ---     no permissions
+1       1       --x     execute only 
+2       10      -w-     write only 
+3       11      -wx     write and execute (2+1)
+4       100     r--     read only 
+5       101     r-x     read and execute (4+1)
+6       110     rw-     read and write (4+2)
+7       111     rwx     read write execute (4+2+1)
+
+# common permissions 
+symbolic            octal 
+-rwx------          chmod 700       
+-rwxr-xr-x          chmod 755
+-rw-rw-rw-          chmod 664
+-rw-rw----          chmod 660
+-rw-r--r--          chmod 644
+
+think before giving 777 or 666
+############################# working with groups ################################
+new files belong to your primary group 
+chgrp           - changes file group 
+chgrp <groupname> <file name>
+
+############################# file creation mask ################################
+determines the fdefualt permissions 
+if no mask were userd permissions would be 777 for dir and 666 for files
+
+umask [-S] [mode]
+umask           - set the file creation mask to the mode given 
+ -S             - S is for symbolic notation 
+ modes subtract from 
+
+# works opposite from chmod
+
+                        directory   file 
+base permission         777         666
+subtract umask          -022        -022
+creations permission    755         644
+
+                        directory   file                 
+base                    777         666
+umask                   -002        -002
+permission              775         664 
+
+# the subtraction doesnt always work there are no negatives so it stops at 0 
+                        directory   file                 
+base                    777         666
+umask                   -007        -007
+permission              770         660  
+
+
+# common umask modes 
+022
+002
+077 
+007 
+
+octal       binary      dir perms     file perms
+0           0           rwx             rw-
+1           1           rw-             rw-
+2           10          r-x             r--
+3           11          r--             r--
+4           100         -wx             -w-
+5           101         -w-             -w-
+6           110         --x             ---
+7           111         ---             ---
+
+# special modes 
+run umask with no args will display 4 characters 
+# special modes are 
+
+setuid
+setgid 
+sticky
+
+umask 0022 is the same as 022
+chmod 0644 is the same as 644
+
+############################# special permission modes ################################
+
+# when a process is strarted it runs using the starting users permissions 
+
+setuid              - set user id upon execution 
+-rwsr-xr-x
+# ex: 
+/usr/bin/passwd     - needs to run as root 
+ping                - needs to run as root 
+chsh                - allows the user to change the shell needs to run as root 
+
+all files that run as root are priveledge escalation targets 
+most linux distros will not allow setuid to run as shell scripts it needs to be run as binary 
+
+# octal permissions
+
+setui   setgid  sticky
+
+0       0       0       val for off 
+1       1       1       val for on 
+4       2       1       base 10 value for on 
+
+# adding the setuid attribute examples
+chmod u+s <file>
+chmod 4755 <file>        -start with a 4 (starts setuid) followed byt hte normal chmod ocatl 
+
+# removing the setuid attribute ex:
+chmod u-s <file>
+chmod 0755 <file> 
+
+# finding setuid
+
+find / -perm /4000      - find all files on the system with setuid active 
+find / -perm /4000 -ls  - displays as a list 
+
+older way 
+
+find / -perm +4000
+find / -perm +4000 -ls 
+
+
+# only the owners should be able to edit setuid files 
+#  if you allow anyone to edit a file belonging to root you are very bad 
+
+                symbolic            octal
+good            -rwsr-xr-x          4755
+bad             -rwsrwxr-x          4775
+really bad      -rwsrwxrwx          4777
+
+############################# setgid ################################
+
+setgid          -set group id upon execution 
+-rwxr-sr-x      
+
+wall            - command that has uses setgid
+
+#find setgid files
+find / -perm /2000
+find / -perm /2000 -ls 
+
+older 
+find / -perm +2000
+find / -perm +2000 -ls 
+
+# add setgid to files
+
+chmod g+s <file>
+chmod 2755 <file>
+
+# add BOTH setuid and setgid to files 
+chmod ug+s <file>
+chomd 6755 <file>       - 4 from setuid adn 2 from setguid = 6***
+
+# removing setgid
+chmod g-s <file>
+chmod 0755 <file>
+
+# setgid on a dir 
+sets new files in the dir to the group of the dir not the user 
+setgid caused dir to inherit the setgid bit 
+it is not retroactive it wil lnot change existing files 
+*** great for working with groups 
+
+################################ finding modified files ## ################################
+
+other than find 
+tripwire
+aide(advanced intrusion detection environment 
+OSSEC
+samhain
+package managers
+
+
+################################ the sticky bit ##################################
+Used on a directory to only allow the owner of the file/dir to delete it 
+Used on tmp 
+you will see a t in the other section of the ls -l 
+
+drwxrrwxrwt 10 root root 4096 feb 1 9:47 /tmp
+
+# set the sticky bit
+chmod o+t <path to dir>
+chmod 1777 <path to dir>
+
+#remove the sticky bit 
+chmod o-t <path>
+chmod 0777 <path>
+
+############################### reading ls output #############################
+if you see a capitalized special permission that measn the permission is not set 
+

@@ -1,0 +1,88 @@
+########################## PORTS ############################
+
+ports 1-1023        - well known privaledged ports 
+                    - need sudo to use 
+
+ports 1024-65535    - anyone can open 
+
+/etc/serviced file maps port names to numbers 
+
+############################ DHCP ###########################
+# dynamic host config protocal
+assigns ip to dhcp clients
+each ip is leased from the dhcp server for a set amt of time 
+the client must renew the address 
+if not renewed the ip becomes available to other dhcp clients 
+
+# config 
+to config a redhat dhcp client
+ifconfig -a or ip link
+
+/etc/sysconfig/network-scripts/ifcfg-DEVICE
+# examples: 
+/etc/sysconfig/network-scripts/ifcfg-eth0
+/etc/sysconfig/network-scripts/ifcfg-enp5s2
+
+BOOTPROTO=dhcp          - ifcfg variable to change for dhcp
+
+# ubuntu
+etc/network/interfaces
+
+auto eth0
+iface eth0 inet dhcp
+
+# Assign a static ip - redhat
+etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=static            - sets to static
+IPADDR=10.109.155.174       - assign ip 
+NETMASK=255.255.255.0       - assign netmask
+NETWORK=10.109.155.0        - assign network
+BROADCAST=10.109.155.255    - assign boadcast
+GATEWAY=10.109.55.1         - assign gateway
+ONBOOT=yes                  - start on boot
+
+# static ip on ubuntu
+etc/network/interfaces
+auto eth0
+iface eth0 inet static
+        address 10.109.155.174
+        netmask 255.255.255.0
+        gateway 10.109.155.1
+
+# manually assign an ip address
+# ip address format:
+ip address add <IP></NETMASK> dev <NETWORK_DEVICE>
+
+# ex:
+ip address add 10.11.12.13 dev eth0
+ip address add 10.11.12.13/255.255.255.0 dev eth0
+
+ip link set eth0 up
+
+# ifconfig format:
+ifconfig <NETWORK_DEVICE> addr netmask <SUBNET_MASK>
+
+# ex:
+ifconfig eth0 10.11.12.13
+ifconfig eth0 10.11.12.13 netmask 255.255.255.0
+
+ifconfig eth0 up
+
+
+# bring an interface up/down 
+# built in scripts
+ifup 
+ifdown 
+
+#ex 
+ifup eth0           - bring the service up 
+ifdown eth0         - bring it down 
+
+# GUI/TUI tools
+graphic/textual interfaces
+RedHat          -           nmtui
+                -           system-config-network
+SUSE            -           YaST - yet another system tool 
+Ubuntu          -           no official tool available
+

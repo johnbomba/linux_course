@@ -1,0 +1,164 @@
+###################################### tab completion ######################################
+can save time on typing
+give list of choices when you're not sure 
+attempts to auto-complete commands & directory names 
+works for command args 
+
+# command ex: 
+john@john:~$ host <tab> <tab>   - type host and press <tab> twice
+host  hostid  hostname          - the terminal displays 3 options for possible commands 
+john@john:~$ host               - host is displayed automatically after the above line
+john@john:~$ hostn<tab>         - type n and press <tab>
+john@john:~$ hostname           - the full command is displayed
+
+# file ex: 
+john@john:~$ ls                 - ls to show files in current dir 
+file1.txt file2.txt file3.txt   - term displays current files files 
+john@john:~$ cat f<tab><tab>    - cat f<tab><tab>
+john@john:~$ cat file           - term fills in the name of the file up to the num in the names
+john@john:~$ cat file1<tab>     - type 1 hit tab
+john@john:~$ cat file1.txt      - terminal fills in the rest
+
+# dir ex
+john@john:~$ ls -d D*           - list directorys (-d) that start with D
+Desktop  Documents  Downloads   - term displays results
+john@john:~$ cd De<tab>         - type cd De<tab>
+john@john:~$ cd Desktop         - term fills in Desktop
+
+
+###################################### bash completion ######################################
+
+programmable completion is a feature of the bash shell that allows command args to be completed
+not all command line programs utilize this feature so it wont always work
+ 
+. /etc/bash_completion
+# to enable edit your .bashrc and uncomment (may be slightly diff depending on distro)
+/etc/bash.bashrc
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# ex:
+
+john@john:~$ git pu<tab
+pull    push
+john@john:~$ git pul<tab>
+john@john:~$ git pull 
+
+###################################### designators ######################################
+
+
+# designator examples: 
+!!                  - most recent command 
+!<string>
+!u                  - most recent that starts with u
+!du                 - most recent that starts with du
+!*                  - most recent args
+!$                  - last item in a command
+
+
+###################################### repeate commands ######################################
+
+!!                                              - most recent command 
+
+john@john:~$ adduser sam                        - try to add a user
+-bash: /usr/sbin/adduser: permission denied     - permission denied need to be root
+john@john:~$ sudo !!                            - reruns previous command as sudo
+sudo adduser sam                                - term shows user added
+john@john:~$ id sam                             - get user info for sam
+uid=1007(sam) gid=1007(sam) groups=1007(sam)    - terminal return
+john@john:~$ userdel -r sam                     - delete user
+-bash: /usr/sbin/userdel: permission denied     - permission denied need to be root
+john@john:~$ sudo !!                            - rerun as root
+sudo userdel sam                                - deleted 
+
+# example history 
+whoami
+uptime
+
+john@john:~$ !w
+whoami
+john
+john@john:~$ sudo !w
+whoami
+root
+
+###################################### reuse args ######################################
+
+!*          - to reuse all of the args from the previous command in your current command
+
+# ex: 
+john@john:~$ touch file1 file2 file3
+john@john:~$ ls !*
+ls file1 file2 file3
+file1 file2 file3
+john@john:~$ mv !* /tmp
+mv file1 file2 file3 /tmp
+
+# ex:
+john@john:~$ mkdir one two three 
+john@john:~$ chmod 700 !*
+chmod 700 one two three 
+
+# great if you mistype a command 
+john@john:~$ grpe -i error /var/log/syslog      - typo for grep
+No command 'grpe' found did you mean:           - error message
+...
+grpe: command not found
+john@john:~$ grep !*                            - grep with repeate args
+grep -i error /var/log/syslog                   - need to be root or sudo error
+grep /var/log/syslog: Permission denied
+john@john:~$ sudo !!                            - repeate last command as sudo
+
+############################## reuse last item of a command  ##############################
+
+!$          - reuse last item
+
+# ex:
+
+john@john:~$ mkdir restore                      - create a restore dir
+john@john:~$ cd !$                              - cd into restore
+cd restore                                      - term shows full command
+john@john:~$ pwd                                - pwd to print working dir
+/home/john/restore                              - term returns dir 
+john@john:~$ unzip /home/john/Downloads/backup.zip
+extracting file1.txt
+extracting file2.txt
+extracting file3.txt
+john@john:~$ rm !$                              - remove file 
+rm /home/john/Downloads.backup.zip
+
+# correct typos
+john@john:~$ touch mispel
+john@john:~$ rm !$
+john@john:~$ touch mispell
+
+# create acct 
+john@john:~$ useradd -m -s /bin/bash greg       - add user greg    
+john@john:~$ sudo passwd !$                     - sudo passwd for the last item (greg)
+sudo passwrd greg                               - term printout of the command 
+Enter new UNIX password:                    
+Retype new UNIX password:
+passwd: password updated successfully
+john@john:~$ sudo chage -M 60 !$                - force greg to change his password every 60 days
+sudo chage -M 60 greg                           - term printout of the command
+
+
+################################# strip comment and blank lines #################################
+
+grep 
+    -E              - enable extended reg expressions
+    -v              - invert matches (print lines that dont match our search 
+
+grep - Ev '^#|^$' <filename>
+    ^               - represents the beginning fo the line 
+    ^#              - dont print lines that start with #
+    |               - or
+    $               - end of a line
+    ^$              - blank line (nothing between the start and end 
+
+

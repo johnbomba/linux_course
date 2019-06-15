@@ -1,0 +1,116 @@
+########################### list running processes ########################### 
+ps                      - show current running process
+-e                      - everthing all processes all users 
+-f                      - full format listing 
+-ef                     - all proccess full format 
+-u <username>           - displays usernames processes
+-p <pid>                - displaus info for PID 
+-eH                     - tree like output
+-e --forest             - tree like 
+
+# other options
+pstree                 
+top                     
+htop                    
+
+########################### forground and background ########################### 
+forground               - shell prompt will not display until that process exits
+background              - shell prompt will not stop you from entering further commands in the shell 
+    - to run in background add an & to the end of the command 
+
+ctrl-c                  - kill forground command 
+ctrl-z                  - suspend the forground process - not yet running in the background 
+
+bg [%num]               - sends a suspended process to the background 
+fg [%num]               - sends a background proess to the forground 
+
+# when a program is running in the background 
+# ex: 
+./program &             - start a program in the bg
+[1] 2373                - [job num] pid
+
+
+jobs                    - list jobs
+#ex:
+jobs will return 
+[1]
+[2]
+[3]-                    - the minus shows the previous job 
+[4]+                    - the plus shows the current/most recently started job
+
+jobs [%num]             - list job by number
+jobs %%                 - current job
+jobs %+                 - current job
+jobs %-                 - previous job
+
+########################### Kill ########################### 
+
+kill <%job or pid>      - kill a proceess by pid or job number 
+
+kill [-sig] pid         - send a signal to a process
+kill -l                 - display a list of signals 
+    -15                 - default terminate signal 
+    -TERM               - terminate signal
+    -9                  - kill signal use if normal kill doesnt work 
+
+# ex:
+    kill 123 
+    kill -15 123
+    kill -TERM 123
+    kill -9 123
+
+########################### cron ########################### 
+cron                    - used to schedule repeated jobs
+crontab                 - a program to create read update and delete jobs
+
+# crontab format
+* * * * * commaand 
+| | | | |
+| | | | +-- day of the week     (0-6)
+| | | +---- Month of the year   (1-12)
+| | +------ Day of the month    (1-31)
+| +-------- hour                (0-23)
++---------- minute              (0-59)
+
+# ex: 
+0 7 * * 1 /opt/sales/bin/weekly-report 
+| | | | |
+| | | | +-- day of the week     (1 monday )
+| | | +---- Month of the year   (*)
+| | +------ Day of the month    (*)
+| +-------- hour                (7 am)
++---------- minute              (0 min)
+
+# output is mailed to you 
+use the mail command 
+
+# ex to redirect output 
+0 2 * * * /root/backupdb > /tmp/db.log 2>&1
+
+# ex crontab
+0,30 * * * *            - runs every half hour
+*/2 * * * *             - same thing 
+0-4 * * * *             - runs the first 5 min of the hour ( minutes 0,1,2,3,4)
+
+# crontab shortcuts
+use man cron to check if these work: 
+@yearly                 - run once a year at midnight jan 1st  
+@annually               - same
+@monthy                 - once per month at midnight the first day 
+@weekly                 - sunday at midnigt 
+@daily                  - midnight every day 
+@midnight               - same
+@hourly                 - once an hour at the top of the hr
+
+crontab
+crontab file            - install a new crontab from a file
+    -l                  - list your cron jobs 
+    -e                  - edit your cron jobs
+    -r                  - remove all your cron jobs 
+
+# ex:
+$ nano my-cron
+
+> 0 7 8 8 1 /opt/sales/bin/report 
+
+$ crontab my-cron 

@@ -1,0 +1,132 @@
+################################## Accounts #####################################
+# accounts have 
+Username                - or login id
+UID                     - unique user id number
+Group
+Comments 
+shell 
+home dir location 
+
+all info is stored in etc/passwd 
+username:password:UID:GID:comments:home_dir:shell
+if password is 'x' then the password is hashed and stored in etc/shadow
+root:x:0:0:root:/root:/bin/bash
+joe:x:1000:1000:joe henderdson:/home/joe:/bin/bash - comment is the full name in this case
+
+#usernames
+usernames can be up to 32 characters long but 8 is customary 
+usernames can be capitalized and are case sensitive but are all lower by convention 
+numbers are allowed but avoid special characters 
+
+#passwords
+passwords used to be stored in etc/passwd but are now in shadow
+no passwords or hashes should be stored in passwd 
+shadow should only be readable by root 
+
+#UID
+UID is unique
+root is always 0
+system is usually <1000
+configured in /etc/login.defs
+
+#GID
+accounts default group 
+new files belong to the defualt group
+users can switch using the newgrp to change group and create files for that group
+
+#comment
+usually has a users full name 
+in case of an app or system it has info on what it is used for 
+may contain info like phone #s 
+sometimes called GECOS
+
+#home directory 
+upon login the user is placed here 
+if there is no home dir the user is placed in root "/"
+
+#shell 
+the shell is executed when the user logs in
+available shells are at /etc/shells
+to prevent interactive use of an acct use /usr/sbin/nologin or /bin/false
+shells can be command line applications 
+
+
+################################## Shadow ########################################
+root:1123y0h8qiwdh:160502:0:99999:7:::
+
+1. user name 
+2. pw hash
+3. no. of days since jan 1 1970 since the pw was changed
+4. no. of days until pw can be changed 
+5. no. of days until pw must be changed (99999 never needs to change)
+6. no. of days to warn user of pw expire 
+7. no. of days after pw expire that the accont is disabled
+8. no. of days since jan 1 1970 that the account is disabled 
+9. reserved for future use
+
+############################### Creagte accounts #####################################
+
+useradd [options] username
+-c "comment"        - comments 
+-m                  - create home dir. copies ete/skel
+-s /shell/path      - path to users shell
+-g group            - add defualt group
+-G                  - add to multiple groups 
+-r                  - system acct
+-d /home/dir        - specify home dir 
+-u                  - specify uid
+
+passwd <username>
+
+user the same use UID across multiple system to facilitate shareing and 
+permissions accross multiple systems 
+
+#ex. 
+useradd -c "john bomba" -g <default group> - G <secondary group(s)> -m -s /bin/bash jbomba
+add     comment name    default group           secondary groups    mkhomedir shell username
+#follow up with passwd command 
+
+############################### Remove accounts #####################################
+
+userdel [-r] username       - deletes user and info
+
+
+############################### modify accounts #####################################
+
+usermod
+-c 'comment'                - change comment in passwd
+-g <group>                  - change default group 
+-G <group> <group>          - change multiple groups 
+-s /shell/path              - change shell
+
+##################################### GRoups #######################################
+/etc/group
+groupadd                    - adds a user to a group (auto GID)
+    -g                      - specify the GID
+
+groupdel                    - delete a group
+
+groupmod                    - modify a group
+    -g                      - cahnge the GID
+    -n                      - change the name
+
+
+############################### switching users and sudo #############################
+su <username>               - changes user to <username> or if left blank root
+    -                       - provide an env 
+    -c                      - specify a command to be executed use quotes for longer commands 
+
+whoami                      - tells you account info
+
+exit                        - returns you to your default user
+
+sudo <username>             - run a program as another user if left blank you are root
+    -l                      - lists avaible command s
+    -u                      - specify another user besides root
+    -s                      - start a shell 
+sudo su                     - change to super user acct
+
+#change the sudo config
+visudo                      - edit the sudoers file (must be root to run)
+
+

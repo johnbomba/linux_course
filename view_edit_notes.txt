@@ -1,0 +1,124 @@
+##################################### display file contents #####################################
+cat <file>          - display the contents of a file 
+
+more <file>         - browse through a text file 
+    <space>         -next page
+    <enter>         -next line
+    <q>             quit
+less <file>         - more features than more
+    same commands as more
+
+head <file>         - ouput the beginning (or top) portion of a file 
+    default 10 lines
+    -n             -n is the # of lines instead of 10
+tail <file>         - output the end portion of a file 
+    same commadns as head
+
+# to follow changes in real time 
+tail -f <file>      - displays data as it is written 
+
+
+##################################### nano #####################################
+pico clone
+nano <file name>
+
+##################################### vi #####################################
+vi <file name>              - edit file
+vim <file name>             - vi iMproved (more features)
+view <file name>            - starts vim in read - only mode
+
+# vi uses modes command insert or line 
+# command mode keybindings:
+# esc to get to commadn mode
+k       - up one line 
+j       - down one line 
+h       - left one character
+l       - right one character
+w       - right one word 
+b       - left one word 
+^       - beginning of line
+$       - end of line 
+# insert mode 
+# use to insert text into a file
+# enter insert mode with i | Aa
+i       - insert at cursor position 
+I       - insert at beginning of line 
+a       - append after the cursor position 
+A       - append at end of line 
+
+# line mode 
+# enter line mode with a colon
+:w          - write(saves) the file 
+:w!         - forces the file to be saved
+:q          - quit
+:q!         - quit with out saving 
+:wq         - write and quit
+:x          - same as :wq
+:n          - position the cursor at line n 
+:$          - position cursor at the last line 
+:set nu     - turn on line numbering 
+:set nonu   - turn off line numbering 
+
+# repeat commands 
+5k                      - move up 5 lines
+80i<text><Esc>          - insert text 80 times 
+80i_<Esc>               - insert 80 "_" characters
+
+# command mode
+x           - delete a character
+dw          - delete word 
+dd          - delete a line
+D           - delete from current position 
+r           - replace current character
+cw          - change the current word 
+cc          - change the current line 
+c$          - change the text from the current position 
+C           - same as c$
+~           - reverses teh case of the character
+yy          - yank (copy) the current line
+y<position> - yank the position
+p           - paste the most recent deleted or yanked text
+u           - undo
+Ctrl+r      - redo
+/<pattern>  - forward search 
+    n       - next match
+    N       - previous match
+?<pattern>  - reverse seatch
+    same commands
+
+##################################### emacs #####################################
+emacs <filename>        - edit file
+C-<char>                - hold ctrl and press char
+M-<char>                - hold down meta (alt) key and press char
+                        - or press and realease esc then press char
+# common commands 
+C-h                     - help
+C-x C-c                 - exit ctrl+x then ctrl+c
+C-x C-s                 - save
+C-h t                   - built in tutorial 
+C-h k <key>             - describe key 
+C-p                     - previous line
+C-n                     - next line
+C-b                     - back one char
+C-f                     - forward one char
+M-f                     - forward one word
+M-b                     - back one word 
+C-a                     - beginning of line
+C-e                     - end of line 
+M-<                     - go to beginning of file
+M->                     - go to end of flie
+C-d                     - del a char
+M-d                     - del a word
+C-k                     - kill (cut)
+C-y                     - yank (paste)
+C-u                     - undo
+C-s                     - forward search
+    <enter>             - enter ends searches 
+C-r                     - reverse search 
+C-u N <command>         - reapeat <command> n times 
+
+##################################### graphical editors #####################################
+emacs 
+gedit
+gvim
+kate
